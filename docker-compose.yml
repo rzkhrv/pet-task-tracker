@@ -1,0 +1,95 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./environments/php/${ENVIRONMENT:-develop}/Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4-fpm-alpine}
+        PHP_COMPOSER_VERSION: ${PHP_COMPOSER_VERSION:-latest}
+        PHP_XDEBUG_FORWARD: ${PHP_XDEBUG_FORWARD:-9003}
+    container_name: app-php
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
+    environment:
+      PHP_XDEBUG_MODE: "${PHP_XDEBUG_MODE:-debug}"
+      PHP_XDEBUG_FORWARD: ${PHP_XDEBUG_FORWARD:-9003}
+    depends_on:
+        redis:
+            condition: service_healthy
+        mysql:
+            condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./environments/nginx/${ENVIRONMENT:-develop}/Dockerfile
+      args:
+        NGINX_VERSION: ${NGINX_VERSION:-latest}
+    container_name: app-nginx
+    ports:
+      - "${NGINX_FORWARD:-8080}:80"
+    volumes:
+      - ./environments/nginx/${ENVIRONMENT:-develop}/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - .:/var/www/html:ro
+    depends_on:
+      php:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    build:
+      context: .
+      dockerfile: ./environments/redis/${ENVIRONMENT:-develop}/Dockerfile
+      args:
+        REDIS_VERSION: ${REDIS_VERSION:-latest}
+    container_name: app-redis
+    ports:
+      - "${REDIS_FORWARD:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  mysql:
+    container_name: app-mysql
+    build:
+      context: .
+      dockerfile: ./environments/mysql/${ENVIRONMENT:-develop}/Dockerfile
+      args:
+        POSTGRES_VERSION: ${MYSQL_VERSION:-8.0}
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_FORWARD:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
+      MYSQL_DATABASE: ${MYSQL_DB:-mysql}
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "/usr/local/bin/healthcheck.sh" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  mysql-data:
+  redis-data:
