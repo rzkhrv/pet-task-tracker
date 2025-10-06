@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('task_notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('task_id');
             $table->text('message');
 

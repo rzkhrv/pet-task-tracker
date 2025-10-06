@@ -9,6 +9,13 @@ use App\Enum\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $user_id
+ * @property string $title
+ * @property ?string $description
+ * @property TaskStatusEnum $status
+ * @property TaskPriorityEnum $priority
+ */
 final class Task extends Model
 {
     protected $fillable = [

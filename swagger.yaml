@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Laravel
+servers:
+  -
+    description: dev
+    url: 'http://192.168.1.77'
+paths:
+  /api/tasks:
+    get:
+      tags:
+        - api
+      parameters:
+        -
+          name: 'filters[status]'
+          in: query
+          required: false
+          schema:
+            nullable: true
+            oneOf:
+              -
+                $ref: '#/components/schemas/TaskStatusEnum'
+        -
+          name: 'filters[priority]'
+          in: query
+          required: false
+          schema:
+            nullable: true
+            oneOf:
+              -
+                $ref: '#/components/schemas/TaskPriorityEnum'
+        -
+          name: 'filters[userId]'
+          in: query
+          required: false
+          schema:
+            type: integer
+            nullable: true
+        -
+          name: 'pagination[page]'
+          in: query
+          required: false
+          schema:
+            type: integer
+        -
+          name: 'pagination[limit]'
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '422':
+          description: Unprocessable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unexpected error.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+components:
+  schemas:
+    JsonResponse:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          nullable: true
+        errors:
+          nullable: true
+      type: object
+    ValidationErrorResponse:
+      allOf:
+        -
+          $ref: '#/components/schemas/JsonResponse'
+        -
+          properties:
+            success:
+              default: false
+            message:
+              default: 'Validation Error.'
+            data:
+              default: null
+            errors:
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+              example:
+                field1:
+                  - 'is required'
+                field2:
+                  - 'is required'
+              nullable: false
+    ErrorResponse:
+      allOf:
+        -
+          $ref: '#/components/schemas/JsonResponse'
+        -
+          properties:
+            success:
+              default: false
+            message:
+              default: Unprocessable.
+            data:
+              default: null
+            errors:
+              type: array
+              items:
+                type: string
+              example:
+                - 'Some error'
+    TaskStatusEnum:
+      type: string
+      enum:
+        - new
+        - in_progress
+        - completed
+        - cancelled
+    TaskPriorityEnum:
+      type: string
+      enum:
+        - high
+        - normal
+        - low
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_token
