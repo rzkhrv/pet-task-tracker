@@ -15,10 +15,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->api([
+        $middleware->use([
             JsonRequestMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+        $exceptions->shouldRenderJsonWhen(fn () => true);
+
+        $exceptions->render(function (Exception $e) {
+            if (request()->is('api/*')) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], property_exists($e, 'status') ? $e->status : 500);
+            }
+        });
+    })
+    ->create();

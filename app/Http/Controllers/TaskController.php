@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Task\PaginateTaskRequest;
+use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Responses\Task\PaginatedTaskCollectionResponse;
+use App\Http\Responses\Task\TaskResourceResponse;
 use App\Http\Services\TaskHttpService;
 
 final class TaskController
@@ -17,5 +19,10 @@ final class TaskController
     public function paginate(PaginateTaskRequest $request): PaginatedTaskCollectionResponse
     {
         return $this->taskHttpService->paginate($request);
+    }
+
+    public function store(StoreTaskRequest $request): TaskResourceResponse
+    {
+        return $this->taskHttpService->store($request);
     }
 }

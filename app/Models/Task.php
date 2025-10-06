@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enum\TaskPriorityEnum;
 use App\Enum\TaskStatusEnum;
+use App\Events\TaskCreatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -24,6 +25,11 @@ final class Task extends Model
         'description',
         'status',
         'priority',
+    ];
+
+    /** @phpstan-ignore-next-line */
+    protected $dispatchesEvents = [
+        'created' => TaskCreatedEvent::class,
     ];
 
     /**

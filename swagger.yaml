@@ -68,6 +68,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationErrorResponse'
+    post:
+      tags:
+        - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTaskRequest'
+      responses:
+        '422':
+          description: Unprocessable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unexpected error.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '200':
+          description: basic-response
 components:
   schemas:
     JsonResponse:
@@ -135,6 +164,23 @@ components:
         - high
         - normal
         - low
+    StoreTaskRequest:
+      required:
+        - title
+        - userId
+        - priority
+      properties:
+        title:
+          type: string
+        userId:
+          type: integer
+          nullable: true
+        priority:
+          $ref: '#/components/schemas/TaskPriorityEnum'
+        description:
+          type: string
+          nullable: true
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

@@ -7,8 +7,11 @@ namespace App\Http\Responses\Task;
 use App\Enum\TaskPriorityEnum;
 use App\Enum\TaskStatusEnum;
 use App\Models\Task;
+use OpenApi\Attributes\Response;
+use Spatie\LaravelData\Data;
 
-final class TaskResourceResponse
+#[Response(response: 200, description: 'basic-response')]
+final class TaskResourceResponse extends Data
 {
     public function __construct(
         public int $id,
