@@ -13,5 +13,5 @@ class TaskCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Task $task) {}
+    public function __construct(public Task $model) {}
 }

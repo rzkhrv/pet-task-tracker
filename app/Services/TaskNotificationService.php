@@ -8,7 +8,7 @@ use App\Dto\Repository\TaskNotification\CreateTaskNotificationDto;
 use App\Dto\Service\TaskNotification\ProcessTaskNotificationDto;
 use App\Enum\TaskNotificationTypeEnum;
 use App\Enum\UserPositionEnum;
-use App\Exceptions\Repository\TaskNotification\FailedWhenCreateTaskNotificationException;
+use App\Exceptions\Repository\TaskNotification\FailedWhenCreateTaskNotificationRepositoryException;
 use App\Models\TaskNotification;
 use App\Repositories\TaskNotificationRepository;
 use App\Repositories\UserRepository;
@@ -34,7 +34,7 @@ class TaskNotificationService
      * @return array<array-key, TaskNotification>
      *
      * @throws Throwable
-     * @throws FailedWhenCreateTaskNotificationException
+     * @throws FailedWhenCreateTaskNotificationRepositoryException
      */
     protected function storeNotifications(ProcessTaskNotificationDto $dto): array
     {

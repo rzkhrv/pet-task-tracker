@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Enum\TaskPriorityEnum;
@@ -10,8 +12,8 @@ class OverrideHighPriorityTaskStatusListener
 {
     public function handle(TaskCreatingEvent $event): void
     {
-        if ($event->task->priority === TaskPriorityEnum::High) {
-            $event->task->status = TaskStatusEnum::InProgress;
+        if ($event->model->priority === TaskPriorityEnum::High) {
+            $event->model->status = TaskStatusEnum::InProgress;
         }
     }
 }

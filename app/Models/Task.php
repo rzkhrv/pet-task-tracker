@@ -9,6 +9,8 @@ use App\Enum\TaskStatusEnum;
 use App\Events\TaskCreatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $user_id
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $description
  * @property TaskStatusEnum $status
  * @property TaskPriorityEnum $priority
+ * @property-read Collection<array-key, TaskComment> $comments
+ * @property-read User $user
  */
 final class Task extends Model
 {
@@ -38,6 +42,14 @@ final class Task extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany<TaskComment, $this>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(TaskComment::class);
     }
 
     protected function casts(): array

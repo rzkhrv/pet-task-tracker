@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Responses\Task;
 
+use App\Dto\Entity\TaskEntity;
 use App\Http\Responses\Common\MetaResponse;
-use App\Models\Task;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
@@ -21,16 +21,16 @@ final class PaginatedTaskCollectionResponse extends Data
     ) {}
 
     /**
-     * @param  LengthAwarePaginator<array-key, Task>  $paginator
+     * @param  LengthAwarePaginator<array-key, TaskEntity>  $paginator
      */
     public static function fromPaginator(LengthAwarePaginator $paginator): self
     {
-        /** @var Collection<array-key, Task> $collection */
+        /** @var Collection<array-key, TaskEntity> $collection */
         $collection = $paginator->getCollection();
 
         return new self(
-            items: $collection->map(static function (Task $task): TaskResourceResponse {
-                return TaskResourceResponse::fromModel($task);
+            items: $collection->map(static function (TaskEntity $task): TaskResourceResponse {
+                return TaskResourceResponse::fromEntity($task);
             }),
             meta: new MetaResponse(
                 currentPage: $paginator->currentPage(),

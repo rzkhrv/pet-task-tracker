@@ -97,6 +97,103 @@ paths:
                 $ref: '#/components/schemas/ValidationErrorResponse'
         '200':
           description: basic-response
+  '/api/tasks/{id}':
+    get:
+      tags:
+        - api
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            pattern: null
+      responses:
+        '422':
+          description: Unprocessable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unexpected error.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/api/tasks/{id}/status':
+    put:
+      tags:
+        - api
+      parameters:
+        -
+          name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskStatusRequest'
+      responses:
+        '422':
+          description: Unprocessable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unexpected error.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '200':
+          description: basic-response
+  '/api/tasks/{id}/comments':
+    post:
+      tags:
+        - api
+      parameters:
+        -
+          name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTaskCommentRequest'
+      responses:
+        '422':
+          description: Unprocessable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unexpected error.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
 components:
   schemas:
     JsonResponse:
@@ -167,19 +264,39 @@ components:
     StoreTaskRequest:
       required:
         - title
-        - userId
         - priority
+        - user_id
       properties:
         title:
           type: string
-        userId:
-          type: integer
-          nullable: true
         priority:
           $ref: '#/components/schemas/TaskPriorityEnum'
+        user_id:
+          type: integer
+          nullable: true
         description:
           type: string
           nullable: true
+      type: object
+    UpdateTaskStatusRequest:
+      required:
+        - status
+        - user_id
+      properties:
+        status:
+          $ref: '#/components/schemas/TaskStatusEnum'
+        user_id:
+          type: integer
+      type: object
+    StoreTaskCommentRequest:
+      required:
+        - comment
+        - user_id
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: integer
       type: object
   securitySchemes:
     bearerAuth:

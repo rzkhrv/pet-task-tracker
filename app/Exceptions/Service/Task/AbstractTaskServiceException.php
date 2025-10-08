@@ -6,4 +6,4 @@ namespace App\Exceptions\Service\Task;
 
 use App\Exceptions\Service\AbstractServiceException;
 
-class AbstractTaskException extends AbstractServiceException {}
+class AbstractTaskServiceException extends AbstractServiceException {}

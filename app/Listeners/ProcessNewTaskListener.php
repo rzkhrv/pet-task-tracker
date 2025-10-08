@@ -16,9 +16,9 @@ class ProcessNewTaskListener
      */
     public function handle(TaskCreatedEvent $event): void
     {
-        if ($event->task->priority === TaskPriorityEnum::High) {
+        if ($event->model->priority === TaskPriorityEnum::High) {
             SendTaskNotificationJob::dispatch(
-                taskId: $event->task->id,
+                taskId: $event->model->id,
                 notificationType: TaskNotificationTypeEnum::TaskAssigned,
             );
         }

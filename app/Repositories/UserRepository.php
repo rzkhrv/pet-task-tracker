@@ -4,21 +4,34 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Dto\Entity\UserEntity;
 use App\Enum\UserPositionEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserRepository
 {
-    public function findById(int $userId): ?User
+    public function findById(int $userId): ?UserEntity
     {
-        return User::find($userId);
+        $user = User::find($userId);
+
+        if ($user === null) {
+            return null;
+        }
+
+        return UserEntity::fromModel($user);
     }
 
-    public function findByPosition(UserPositionEnum $position): ?User
+    public function findByPosition(UserPositionEnum $position): ?UserEntity
     {
-        return $this->buildByPositionQuery($position)
+        $user = $this->buildByPositionQuery($position)
             ->first();
+
+        if ($user === null) {
+            return null;
+        }
+
+        return UserEntity::fromModel($user);
     }
 
     /**

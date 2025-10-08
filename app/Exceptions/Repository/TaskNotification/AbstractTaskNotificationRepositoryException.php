@@ -6,4 +6,4 @@ namespace App\Exceptions\Repository\TaskNotification;
 
 use App\Exceptions\Repository\AbstractRepositoryException;
 
-class AbstractTaskNotificationException extends AbstractRepositoryException {}
+class AbstractTaskNotificationRepositoryException extends AbstractRepositoryException {}

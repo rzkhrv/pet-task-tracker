@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Responses\Task;
 
+use App\Dto\Entity\TaskEntity;
 use App\Enum\TaskPriorityEnum;
 use App\Enum\TaskStatusEnum;
-use App\Models\Task;
 use OpenApi\Attributes\Response;
 use Spatie\LaravelData\Data;
 
 #[Response(response: 200, description: 'basic-response')]
-final class TaskResourceResponse extends Data
+class TaskResourceResponse extends Data
 {
     public function __construct(
         public int $id,
@@ -22,15 +22,15 @@ final class TaskResourceResponse extends Data
         public ?string $description = null,
     ) {}
 
-    public static function fromModel(Task $task): self
+    public static function fromEntity(TaskEntity $entity): self
     {
         return new self(
-            id: $task->id,
-            userId: $task->user_id,
-            title: $task->title,
-            status: $task->status,
-            priority: $task->priority,
-            description: $task->description,
+            id: $entity->id,
+            userId: $entity->userId,
+            title: $entity->title,
+            status: $entity->status,
+            priority: $entity->priority,
+            description: $entity->description,
         );
     }
 }

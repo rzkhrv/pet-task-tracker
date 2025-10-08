@@ -13,7 +13,7 @@ class StoreTaskRequest extends Data implements JsonRequestInterface
     public function __construct(
         public string $title,
         public TaskPriorityEnum $priority,
-        public ?int $userId,
+        public ?int $user_id,
         public ?string $description = null,
     ) {}
 }
