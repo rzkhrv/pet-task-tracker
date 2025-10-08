@@ -8,9 +8,10 @@ use App\Dto\Entity\TaskEntity;
 use App\Http\Responses\Common\MetaResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Kr0lik\DtoToSwagger\Contract\JsonResponseInterface;
 use Spatie\LaravelData\Data;
 
-final class PaginatedTaskCollectionResponse extends Data
+final class PaginatedTaskCollectionResponse extends Data implements JsonResponseInterface
 {
     /**
      * @param  Collection<array-key, TaskResourceResponse>  $items

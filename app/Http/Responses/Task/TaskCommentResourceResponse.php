@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Responses\Task;
 
 use App\Dto\Entity\TaskCommentEntity;
+use Kr0lik\DtoToSwagger\Contract\JsonResponseInterface;
 use Spatie\LaravelData\Data;
 
-class TaskCommentResourceResponse extends Data
+class TaskCommentResourceResponse extends Data implements JsonResponseInterface
 {
     public function __construct(
         public int $id,

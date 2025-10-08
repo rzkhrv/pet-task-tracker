@@ -23,6 +23,7 @@ final class TaskControllerTest extends TestCase
                         'description',
                         'status',
                         'priority',
+                        'createdAt',
                     ],
                 ],
                 'meta' => [

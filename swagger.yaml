@@ -68,6 +68,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationErrorResponse'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTaskCollectionResponse'
     post:
       tags:
         - api
@@ -96,7 +102,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidationErrorResponse'
         '200':
-          description: basic-response
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResourceResponse'
   '/api/tasks/{id}':
     get:
       tags:
@@ -122,6 +132,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskWithCommentsAndUserResourceResponse'
   '/api/tasks/{id}/status':
     put:
       tags:
@@ -158,7 +174,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidationErrorResponse'
         '200':
-          description: basic-response
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResourceResponse'
   '/api/tasks/{id}/comments':
     post:
       tags:
@@ -194,6 +214,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationErrorResponse'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCommentResourceResponse'
 components:
   schemas:
     JsonResponse:
@@ -261,6 +287,57 @@ components:
         - high
         - normal
         - low
+    TaskResourceResponse:
+      required:
+        - id
+        - userId
+        - title
+        - status
+        - priority
+        - description
+        - createdAt
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        status:
+          $ref: '#/components/schemas/TaskStatusEnum'
+        priority:
+          $ref: '#/components/schemas/TaskPriorityEnum'
+        description:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      type: object
+    MetaResponse:
+      required:
+        - currentPage
+        - perPage
+        - total
+      properties:
+        currentPage:
+          type: integer
+        perPage:
+          type: integer
+        total:
+          type: integer
+      type: object
+    PaginatedTaskCollectionResponse:
+      required:
+        - items
+        - meta
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResourceResponse'
+        meta:
+          $ref: '#/components/schemas/MetaResponse'
+      type: object
     StoreTaskRequest:
       required:
         - title
@@ -274,6 +351,68 @@ components:
         user_id:
           type: integer
           nullable: true
+        description:
+          type: string
+          nullable: true
+      type: object
+    UserPositionEnum:
+      type: string
+      enum:
+        - manager
+        - developer
+        - tester
+    ShortUserInfoResourceResponse:
+      required:
+        - name
+        - position
+      properties:
+        name:
+          type: string
+        position:
+          $ref: '#/components/schemas/UserPositionEnum'
+      type: object
+    TaskCommentResourceResponse:
+      required:
+        - id
+        - taskId
+        - comment
+        - userId
+        - createdAt
+      properties:
+        id:
+          type: integer
+        taskId:
+          type: integer
+        comment:
+          type: string
+        userId:
+          type: integer
+        createdAt:
+          type: string
+      type: object
+    TaskWithCommentsAndUserResourceResponse:
+      required:
+        - id
+        - user
+        - title
+        - status
+        - priority
+        - comments
+      properties:
+        id:
+          type: integer
+        user:
+          $ref: '#/components/schemas/ShortUserInfoResourceResponse'
+        title:
+          type: string
+        status:
+          $ref: '#/components/schemas/TaskStatusEnum'
+        priority:
+          $ref: '#/components/schemas/TaskPriorityEnum'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCommentResourceResponse'
         description:
           type: string
           nullable: true

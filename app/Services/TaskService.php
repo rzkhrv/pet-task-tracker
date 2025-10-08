@@ -25,6 +25,7 @@ use App\Exceptions\Service\Task\CanNotUpdateTaskStatusServiceException;
 use App\Exceptions\Service\Task\CreateTaskServiceException;
 use App\Exceptions\Service\Task\TaskNotFoundServiceException;
 use App\Exceptions\Service\TaskComment\CreateTaskCommentServiceException;
+use App\Exceptions\Service\TaskComment\ForbiddenCreateTaskCommentForCancelledTaskException;
 use App\Exceptions\Service\UnexpectedServiceException;
 use App\Exceptions\Service\User\UserNotFoundException;
 use App\Repositories\TaskCommentRepository;
@@ -111,10 +112,15 @@ final class TaskService
      * @throws CreateTaskCommentServiceException
      * @throws TaskNotFoundServiceException
      * @throws UnexpectedServiceException
+     * @throws ForbiddenCreateTaskCommentForCancelledTaskException
      */
     public function storeComment(StoreTaskCommentServiceDto $dto): TaskCommentEntity
     {
         $task = $this->get($dto->taskId);
+
+        if ($task->status === TaskStatusEnum::Cancelled) {
+            throw new ForbiddenCreateTaskCommentForCancelledTaskException('Can not create task comment for cancelled task');
+        }
 
         try {
             $taskComment = $this->taskCommentRepository->create(

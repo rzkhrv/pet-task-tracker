@@ -7,11 +7,10 @@ namespace App\Http\Responses\Task;
 use App\Dto\Entity\TaskEntity;
 use App\Enum\TaskPriorityEnum;
 use App\Enum\TaskStatusEnum;
-use OpenApi\Attributes\Response;
+use Kr0lik\DtoToSwagger\Contract\JsonResponseInterface;
 use Spatie\LaravelData\Data;
 
-#[Response(response: 200, description: 'basic-response')]
-class TaskResourceResponse extends Data
+class TaskResourceResponse extends Data implements JsonResponseInterface
 {
     public function __construct(
         public int $id,
