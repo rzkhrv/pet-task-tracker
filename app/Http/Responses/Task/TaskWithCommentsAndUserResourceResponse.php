@@ -9,8 +9,9 @@ use App\Dto\Entity\TaskWithCommentsAndUserEntity;
 use App\Enum\TaskPriorityEnum;
 use App\Enum\TaskStatusEnum;
 use App\Http\Responses\Task\Nested\ShortUserInfoResourceResponse;
+use Spatie\LaravelData\Data;
 
-class TaskWithCommentsAndUserResourceResponse
+class TaskWithCommentsAndUserResourceResponse extends Data
 {
     /**
      * @param  array<array-key, TaskCommentResourceResponse>  $comments

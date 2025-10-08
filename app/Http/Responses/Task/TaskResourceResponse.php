@@ -20,6 +20,7 @@ class TaskResourceResponse extends Data
         public TaskStatusEnum $status,
         public TaskPriorityEnum $priority,
         public ?string $description = null,
+        public string $createdAt,
     ) {}
 
     public static function fromEntity(TaskEntity $entity): self
@@ -31,6 +32,7 @@ class TaskResourceResponse extends Data
             status: $entity->status,
             priority: $entity->priority,
             description: $entity->description,
+            createdAt: $entity->createdAt,
         );
     }
 }

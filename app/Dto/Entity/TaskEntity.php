@@ -24,7 +24,7 @@ class TaskEntity
     {
         return new self(
             id: $model->id,
-            userId: $model->id,
+            userId: $model->user_id,
             title: $model->title,
             status: $model->status,
             priority: $model->priority,

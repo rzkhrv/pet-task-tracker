@@ -58,9 +58,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         Model::shouldBeStrict();
 
-        Event::listen(TaskCreatedEvent::class, [
-            ProcessNewTaskListener::class,
-        ]);
+        Event::listen(TaskCreatedEvent::class, ProcessNewTaskListener::class);
 
         Event::listen(TaskUpdatedEvent::class, [
             CreateCommentForCompletedTaskListener::class,
