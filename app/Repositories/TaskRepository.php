@@ -10,6 +10,7 @@ use App\Dto\Repository\Task\CreateTaskRepositoryDto;
 use App\Dto\Repository\Task\Nested\TaskFiltersDto;
 use App\Dto\Repository\Task\PaginateTaskRepositoryDto;
 use App\Dto\Repository\Task\UpdateTaskRepositoryDto;
+use App\Enum\TaskStatusEnum;
 use App\Exceptions\Repository\Task\FailedWhenCreateTaskRepositoryException;
 use App\Exceptions\Repository\Task\TaskNotFoundRepositoryException;
 use App\Exceptions\Repository\UnexpectedRepositoryException;
@@ -21,6 +22,10 @@ use Throwable;
 
 final class TaskRepository
 {
+    public function __construct(
+        private int $overdueDays,
+    ) {}
+
     /**
      * @return LengthAwarePaginator<array-key, TaskEntity>
      */
@@ -113,6 +118,21 @@ final class TaskRepository
         $task->loadMissing(['comments', 'user']);
 
         return TaskWithCommentsAndUserEntity::fromModel($task);
+    }
+
+    /**
+     * @return array<int>
+     */
+    public function getAllOverdueIds(): array
+    {
+        /** @var array<int> $ids */
+        $ids = Task::query()
+            ->where('created_at', '>', now()->subDays($this->overdueDays))
+            ->where('status', TaskStatusEnum::InProgress)
+            ->pluck('id')
+            ->toArray();
+
+        return $ids;
     }
 
     /**

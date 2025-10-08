@@ -10,6 +10,7 @@ use App\Events\TaskCreatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -18,6 +19,8 @@ use Illuminate\Support\Collection;
  * @property ?string $description
  * @property TaskStatusEnum $status
  * @property TaskPriorityEnum $priority
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property-read Collection<array-key, TaskComment> $comments
  * @property-read User $user
  */
@@ -57,6 +60,8 @@ final class Task extends Model
         return [
             'status' => TaskStatusEnum::class,
             'priority' => TaskPriorityEnum::class,
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 }

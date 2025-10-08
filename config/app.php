@@ -125,4 +125,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'task' => [
+        'overdue_days' => (int) env('APP_TASK_OVERDUE_DAYS', 7),
+    ],
 ];

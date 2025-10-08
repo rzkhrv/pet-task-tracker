@@ -17,6 +17,7 @@ class TaskEntity
         public TaskStatusEnum $status,
         public TaskPriorityEnum $priority,
         public ?string $description,
+        public string $createdAt,
     ) {}
 
     public static function fromModel(Task $model): self
@@ -28,6 +29,7 @@ class TaskEntity
             status: $model->status,
             priority: $model->priority,
             description: $model->description,
+            createdAt: $model->created_at->toDateTimeString(),
         );
     }
 }

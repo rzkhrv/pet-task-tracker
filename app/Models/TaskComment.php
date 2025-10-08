@@ -6,7 +6,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property Carbon $created_at
+ */
 final class TaskComment extends Model
 {
     public const UPDATED_AT = null;
@@ -31,5 +35,12 @@ final class TaskComment extends Model
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
     }
 }

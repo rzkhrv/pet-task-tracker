@@ -162,6 +162,27 @@ final class TaskService
     }
 
     /**
+     * @return array<int>
+     */
+    public function getAllOverdueIds(): array
+    {
+        return $this->taskRepository->getAllOverdueIds();
+    }
+
+    public function storeOverdueComment(int $taskId): void
+    {
+        $task = $this->get($taskId);
+
+        $this->storeComment(
+            new StoreTaskCommentServiceDto(
+                taskId: $task->id,
+                comment: 'Task is overdue! Created '.$task->createdAt,
+                userId: $task->userId
+            )
+        );
+    }
+
+    /**
      * @throws CreateTaskServiceException
      */
     private function getUserForNewTask(?int $userId): UserEntity
